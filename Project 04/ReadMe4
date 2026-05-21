@@ -1,0 +1,42 @@
+# AI Optic Nerve – Optical Character Recognition (OCR) Pipeline 
+
+## Overview
+This project serves as the capstone for **Artificial Intelligence Project 4: Image/Text Recognition**. It is a robust, production-grade Computer Vision pipeline designed to extract structured text data from unstructured, noisy images. 
+
+Moving beyond simple API calls, this architecture features a custom pre-processing engine to clean visual data, an inference engine utilizing Tesseract OCR, and an accuracy benchmarking gate to ensure high-fidelity data extraction.
+
+## Features & Validations Met
+* **[✓] Library Integration:** Seamlessly orchestrates `OpenCV` (cv2) for image manipulation and `pytesseract` for model inference.
+* **[✓] Pre-Processing Integrity:** Raw images are programmatically cleaned before inference using Grayscale conversion, Gaussian Blurring, Adaptive Thresholding, and rotational Deskewing.
+* **[✓] Accuracy Benchmarking:** Implements a strict **80% Confidence Gate**. The engine drops false positives and low-confidence visual artifacts, ensuring only highly accurate text is extracted.
+* **[✓] Visual Confirmation:** Generates a pristine visual output image, overlaying the original document with dynamically colored bounding boxes and confidence score labels.
+* **[✓] Synthetic Data Generation:** Includes a built-in module that dynamically generates a noisy "test invoice" image, allowing the pipeline to be tested immediately out-of-the-box.
+
+## Technologies Used
+* **Python 3.x**
+* **OpenCV (`cv2`)** (Image matrix manipulation and pre-processing)
+* **PyTesseract** (Google's Tesseract-OCR Engine wrapper)
+* **Pandas** (Structuring per-word confidence data)
+* **NumPy** (Mathematical matrix operations)
+
+## Pipeline Architecture
+The system is built using Object-Oriented Principles, decoupled into distinct processing stages:
+
+1. **PreProcessor:** Converts the 3-channel RGB image to grayscale, applies a Gaussian blur to remove micro-artifacts, executes Otsu-style adaptive thresholding for binarization, and calculates/corrects text tilt (deskew).
+2. **OCRInferenceEngine:** Runs the cleaned binary image through Tesseract using Page Segmentation Mode (PSM) 11 (optimized for scattered, unstructured text like invoices).
+3. **Data Structuring:** Outputs the raw inference into a Pandas DataFrame, filtering out any row that fails the ≥80% confidence check.
+4. **VisualOutputEngine:** Maps the mathematical coordinates of the validated text back onto the original image, drawing UI bounding boxes for human verification.
+
+## Installation & Prerequisites
+
+**1. Install the Tesseract Engine (Required)**
+Because `pytesseract` is just a Python wrapper, the actual Tesseract software must be installed on your operating system:
+* **macOS:** `brew install tesseract`
+* **Windows:** Download the installer from [UB-Mannheim/tesseract](https://github.com/UB-Mannheim/tesseract/wiki) and add it to your system PATH.
+* **Linux:** `sudo apt install tesseract-ocr`
+
+**2. Clone and Install Dependencies**
+```bash
+git clone [https://github.com/yourusername/ocr-pipeline.git](https://github.com/yourusername/ocr-pipeline.git)
+cd ocr-pipeline
+pip install opencv-python pytesseract pandas numpy pillow
